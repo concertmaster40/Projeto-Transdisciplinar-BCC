@@ -1,0 +1,31 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Página-1" id="jrw2xiIYXeBc7cKwvMEJ">
+    <mxGraphModel dx="1414" dy="751" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="BHxwYmj1xCb7zk53b6Pu-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Exemplo de API em Java com Spring Boot(Sem REST por enquanto)&amp;nbsp;&lt;div&gt;Link:&amp;nbsp;https://spring.io/guides/tutorials/rest&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="180" x="20" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="BHxwYmj1xCb7zk53b6Pu-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Simple Payroll service that manages the employees of a company" vertex="1">
+          <mxGeometry height="70" width="180" x="294" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="BHxwYmj1xCb7zk53b6Pu-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Employee.java" vertex="1">
+          <mxGeometry height="60" width="120" x="324" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="BHxwYmj1xCb7zk53b6Pu-5" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="460" y="250" as="sourcePoint" />
+            <mxPoint x="540" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BHxwYmj1xCb7zk53b6Pu-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Overview:&lt;div&gt;- Stores employee object in H2-memory (a RDBMS)&amp;nbsp;&lt;div&gt;- Access objects through JPA&lt;/div&gt;&lt;div&gt;- Wraps object with Spring MVC layer, to access them over internet&lt;br&gt;&lt;div&gt;&lt;span style=&quot;color: rgba(0, 0, 0, 0); font-family: monospace; font-size: 0px; text-align: start; white-space: nowrap;&quot;&gt;- S%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20parent%3D%221%22%20style%3D%22text%3Bhtml%3D1%3BwhiteSpace%3Dwrap%3BstrokeColor%3Dnone%3BfillColor%3Dnone%3Balign%3Dcenter%3BverticalAlign%3Dmiddle%3Brounded%3D0%3B%22%20value%3D%22Simple%20Payroll%20service%20that%20manages%20the%20employees%20of%20a%20company%22%20vertex%3D%221%22%3E%3CmxGeometry%20height%3D%2270%22%20width%3D%22180%22%20x%3D%22324%22%20y%3D%2280%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;color: rgba(0, 0, 0, 0); font-family: monospace; font-size: 0px; text-align: start; white-space: nowrap;&quot;&gt;- E&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="180" x="294" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="BHxwYmj1xCb7zk53b6Pu-8" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Java class to store employee data with JPA notations" vertex="1">
+          <mxGeometry height="70" width="180" x="550" y="220" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
