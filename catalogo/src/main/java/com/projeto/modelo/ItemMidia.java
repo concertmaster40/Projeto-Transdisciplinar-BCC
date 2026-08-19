@@ -1,23 +1,23 @@
 package com.projeto.modelo;
 
-class ItemMidia{
+public class ItemMidia{
 
     private Integer id;
     private String titulo;
-    private String autor_diretor;
-    private Integer ano_lancamento;
+    private String autorDiretor;
+    private Integer anoLancamento;
     private String genero;
     private String sinopse;
-    private String tipo_middia;
+    private String tipoMidia;
 
     public ItemMidia(){}
 
-    public ItemMidia(Integer ano_lancamento, String autor_diretor, String genero, String sinopse, String tipo_middia, String titulo) {
-        this.ano_lancamento = ano_lancamento;
-        this.autor_diretor = autor_diretor;
+    public ItemMidia(Integer anoLancamento, String autorDiretor, String genero, String sinopse, String tipoMidia, String titulo) {
+        this.anoLancamento = anoLancamento;
+        this.autorDiretor = autorDiretor;
         this.genero = genero;
         this.sinopse = sinopse;
-        this.tipo_middia = tipo_middia;
+        this.tipoMidia = tipoMidia;
         this.titulo = titulo;
     }
 
@@ -29,12 +29,12 @@ class ItemMidia{
         return titulo;
     }
 
-    public String getAutor_diretor() {
-        return autor_diretor;
+    public String getAutorDiretor() {
+        return autorDiretor;
     }
 
-    public Integer getAno_lancamento() {
-        return ano_lancamento;
+    public Integer getAnoLancamento() {
+        return anoLancamento;
     }
 
     public String getGenero() {
@@ -45,20 +45,24 @@ class ItemMidia{
         return sinopse;
     }
 
-    public String getTipo_middia() {
-        return tipo_middia;
+    public String getTipoMidia() {
+        return tipoMidia;
+    }
+
+    public void setId(Integer id){
+        this.id = id;
     }
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
 
-    public void setAutor_diretor(String autor_diretor) {
-        this.autor_diretor = autor_diretor;
+    public void setAutorDiretor(String autorDiretor) {
+        this.autorDiretor = autorDiretor;
     }
 
-    public void setAno_lancamento(Integer ano_lancamento) {
-        this.ano_lancamento = ano_lancamento;
+    public void setAnoLancamento(Integer anoLancamento) {
+        this.anoLancamento = anoLancamento;
     }
 
     public void setGenero(String genero) {
@@ -69,8 +73,8 @@ class ItemMidia{
         this.sinopse = sinopse;
     }
 
-    public void setTipo_middia(String tipo_middia) {
-        this.tipo_middia = tipo_middia;
+    public void setTipoMidia(String tipoMidia) {
+        this.tipoMidia = tipoMidia;
     }
 
     @Override
@@ -79,15 +83,12 @@ class ItemMidia{
         sb.append("ItemMidia{");
         sb.append("id=").append(id);
         sb.append(", titulo=").append(titulo);
-        sb.append(", autor_diretor=").append(autor_diretor);
-        sb.append(", ano_lancamento=").append(ano_lancamento);
+        sb.append(", autorDiretor=").append(autorDiretor);
+        sb.append(", anoLancamento=").append(anoLancamento);
         sb.append(", genero=").append(genero);
         sb.append(", sinopse=").append(sinopse);
-        sb.append(", tipo_middia=").append(tipo_middia);
+        sb.append(", tipoMidia=").append(tipoMidia);
         sb.append('}');
         return sb.toString();
     }
-
-    
-    
 }
