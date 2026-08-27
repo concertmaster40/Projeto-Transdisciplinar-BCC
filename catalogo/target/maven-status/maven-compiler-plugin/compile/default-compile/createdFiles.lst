@@ -1,0 +1,5 @@
+com\projeto\controlador\CadastrarItemServlet.class
+com\projeto\App.class
+com\projeto\modelo\ItemMidia.class
+com\projeto\dao\ItemMidiaDAO.class
+com\projeto\dao\DBConnection.class

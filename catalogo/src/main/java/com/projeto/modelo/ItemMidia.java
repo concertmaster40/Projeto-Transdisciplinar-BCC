@@ -1,6 +1,6 @@
 package com.projeto.modelo;
 
-class ItemMidia{
+public class ItemMidia{
 
     private Integer id;
     private String titulo;

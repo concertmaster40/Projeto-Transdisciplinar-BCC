@@ -1,9 +1,10 @@
 package com.projeto.dao;
 
-import com.projeto.modelo.ItemMidia;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import com.projeto.modelo.ItemMidia;
 
 public class ItemMidiaDAO {
     
@@ -18,11 +19,11 @@ public class ItemMidiaDAO {
             
             // Substituindo as "?" pelos valores do objeto
             stmt.setString(1, item.getTitulo());
-            stmt.setString(2, item.getAutor_diretor());
-            stmt.setInt(3, item.getAno_lancamento());
+            stmt.setString(2, item.getAutorDiretor());
+            stmt.setInt(3, item.getAnoLancamento());
             stmt.setString(4, item.getGenero());
             stmt.setString(5, item.getSinopse());
-            stmt.setString(6, item.getTipo_midia());
+            stmt.setString(6, item.getTipoMidia());
             
             stmt.executeUpdate(); // Executa o comando no banco de dados
             System.out.println("Item inserido com sucesso!");
