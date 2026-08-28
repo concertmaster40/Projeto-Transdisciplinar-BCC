@@ -1,6 +1,6 @@
 package com.projeto.modelo;
 
-class ItemMidia{
+public class ItemMidia{
 
     private Integer id;
     private String titulo;
@@ -49,6 +49,10 @@ class ItemMidia{
         return tipoMidia;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
@@ -87,7 +91,4 @@ class ItemMidia{
         sb.append('}');
         return sb.toString();
     }
-
-    
-    
 }

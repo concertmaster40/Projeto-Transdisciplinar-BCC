@@ -1,34 +1,137 @@
 package com.projeto.dao;
 
-import com.projeto.modelo.ItemMidia;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.projeto.modelo.ItemMidia;
+
 public class ItemMidiaDAO {
-    
+
     // Método CREATE no banco
     public void insert(ItemMidia item) {
-        // "?" serve como segurança contra sql injection
         String sql = "INSERT INTO item_midia (titulo, autor_diretor, ano_lancamento, genero, sinopse, tipo_midia) VALUES (?, ?, ?, ?, ?, ?)";
-        
-        // try-with-resources garante que a conexão e o statement serão fechados automaticamente
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            // Substituindo as "?" pelos valores do objeto
+
             stmt.setString(1, item.getTitulo());
-            stmt.setString(2, item.getAutor_diretor());
-            stmt.setInt(3, item.getAno_lancamento());
+            stmt.setString(2, item.getAutorDiretor());
+            stmt.setInt(3, item.getAnoLancamento());
             stmt.setString(4, item.getGenero());
             stmt.setString(5, item.getSinopse());
-            stmt.setString(6, item.getTipo_midia());
-            
-            stmt.executeUpdate(); // Executa o comando no banco de dados
+            stmt.setString(6, item.getTipoMidia());
+
+            stmt.executeUpdate();
             System.out.println("Item inserido com sucesso!");
-            
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir item no banco: " + e.getMessage());
         }
+    }
+
+    // Método READ no banco (retorna ItemMidia em vez de void)
+    public ItemMidia read(Integer id) {
+    String sql = "SELECT * FROM item_midia WHERE id = ?";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, id);
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return mapearItemMidia(rs); // Limpo e direto
+            }
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao buscar item no banco: " + e.getMessage());
+    }
+    return null;
+    }
+
+    // Método UPDATE no banco
+    public void update(ItemMidia item) {
+        String sql = "UPDATE item_midia SET titulo = ?, autor_diretor = ?, ano_lancamento = ?, genero = ?, sinopse = ?, tipo_midia = ? WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Substituindo as interrogações para a atualização
+            stmt.setString(1, item.getTitulo());
+            stmt.setString(2, item.getAutorDiretor());
+            stmt.setInt(3, item.getAnoLancamento());
+            stmt.setString(4, item.getGenero());
+            stmt.setString(5, item.getSinopse());
+            stmt.setString(6, item.getTipoMidia());
+            stmt.setInt(7, item.getId());
+
+            int linhasAfetadas = stmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                System.out.println("Item atualizado com sucesso!");
+            } else {
+                System.out.println("Nenhum item encontrado com o ID informado (" + item.getId() + ").");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar item no banco: " + e.getMessage());
+        }
+    }
+
+    // Método DELETE no banco
+    public void delete(Integer id) {
+        String sql = "DELETE FROM item_midia WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            int linhasAfetadas = stmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                System.out.println("Item excluído com sucesso");
+            } else {
+                System.out.println("Nenhum item encontrado com o ID fornecido");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar item do banco: " + e.getMessage());
+        }
+    }
+
+    // Método para listar todos os itens
+    public java.util.List<ItemMidia> readAll() {
+        String sql = "SELECT * FROM item_midia";
+        java.util.List<ItemMidia> lista = new java.util.ArrayList<>();
+    
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                lista.add(mapearItemMidia(rs)); // Reutiliza seu método de mapeamento!
+            }
+        
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar itens do banco: " + e.getMessage());
+        }
+    
+        return lista;
+    }
+
+    // Método utilitário para mapear mídias
+    private ItemMidia mapearItemMidia(ResultSet rs) throws SQLException {
+    ItemMidia item = new ItemMidia();
+    item.setId(rs.getInt("id"));
+    item.setTitulo(rs.getString("titulo"));
+    item.setAutorDiretor(rs.getString("autor_diretor"));
+    item.setAnoLancamento(rs.getInt("ano_lancamento"));
+    item.setGenero(rs.getString("genero"));
+    item.setSinopse(rs.getString("sinopse"));
+    item.setTipoMidia(rs.getString("tipo_midia"));
+    return item;
     }
 }

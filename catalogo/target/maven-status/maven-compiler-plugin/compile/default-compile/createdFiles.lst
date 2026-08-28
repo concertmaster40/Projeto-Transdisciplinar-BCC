@@ -1,0 +1,9 @@
+com\projeto\controlador\CadastrarItemServlet.class
+com\projeto\modelo\ItemMidia.class
+com\projeto\controlador\DeletarItemServlet.class
+com\projeto\controlador\AlterarItemServlet.class
+com\projeto\App.class
+com\projeto\controlador\ListarItensServlet.class
+com\projeto\dao\ItemMidiaDAO.class
+com\projeto\controlador\ListarItemServlet.class
+com\projeto\dao\DBConnection.class
