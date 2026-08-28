@@ -49,6 +49,10 @@ public class ItemMidia{
         return tipoMidia;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
@@ -87,7 +91,4 @@ public class ItemMidia{
         sb.append('}');
         return sb.toString();
     }
-
-    
-    
 }
