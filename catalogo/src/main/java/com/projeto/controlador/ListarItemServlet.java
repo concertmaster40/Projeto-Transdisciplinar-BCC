@@ -1,35 +1,38 @@
 package com.projeto.controlador;
 
-import com.projeto.dao.ItemMidiaDAO;
-import com.projeto.modelo.ItemMidia;
+import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
 
-@WebServlet("/listar")
+import com.projeto.dao.ItemMidiaDAO;
+import com.projeto.modelo.ItemMidia;
+
+@WebServlet("/listarItem")
 public class ListarItemServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
 
-        try {
+        String idString = request.getParameter("id");
+
+        if (idString != null && !idString.isEmpty()) {
+            Integer id = Integer.parseInt(idString);
             ItemMidiaDAO dao = new ItemMidiaDAO();
-            List<ItemMidia> listaItens = dao.readAll();
+            ItemMidia item = dao.read(id); // Busca apenas um registro pelo ID
 
-            // Atribui a lista de itens à requisição
-            request.setAttribute("itens", listaItens);
-
-            // Redireciona a requisição para a página JSP exibir a tabela
-            request.getRequestDispatcher("listarItens.jsp").forward(request, response);
-
-        } catch (Exception e) {
-            throw new ServletException("Erro ao buscar a lista de itens: " + e.getMessage());
+            if (item != null) {
+                request.setAttribute("item", item);
+                request.getRequestDispatcher("listarItem.jsp").forward(request, response);
+                return;
+            }
         }
+
+        // Se não encontrar o ID ou for nulo, volta para a lista geral
+        response.sendRedirect("listarItens");
     }
 }
