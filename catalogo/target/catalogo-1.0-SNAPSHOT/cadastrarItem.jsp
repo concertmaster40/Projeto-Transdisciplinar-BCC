@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cadastrar Item - Catálogo</title>
+    <link rel="stylesheet" type="text/css" href="css/estilo.css">
 </head>
 <body>
     <h2>Cadastrar Novo Item no Catálogo</h2>

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Home - Catálogo de Mídias</title>
+    <link rel="stylesheet" type="text/css" href="css/estilo.css">
 </head>
 <body>
 

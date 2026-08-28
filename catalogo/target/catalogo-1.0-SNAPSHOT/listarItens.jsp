@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista de Itens - Catálogo</title>
+    <link rel="stylesheet" type="text/css" href="css/estilo.css">
 </head>
 <body>
     <h2>Catálogo de Mídias (Todos os Itens)</h2>

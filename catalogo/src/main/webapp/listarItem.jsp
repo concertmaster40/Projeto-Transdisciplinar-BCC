@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Detalhes do Item - Catálogo</title>
+    <link rel="stylesheet" type="text/css" href="css/estilo.css">
 </head>
 <body>
     <% 
