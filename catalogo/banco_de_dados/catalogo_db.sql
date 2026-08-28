@@ -28,7 +28,7 @@ CREATE TABLE `item_midia` (
   `id` int NOT NULL AUTO_INCREMENT,
   `titulo` varchar(255) NOT NULL,
   `autor_diretor` varchar(255) DEFAULT NULL,
-  `ano_lancamento` int DEFAULT NULL,
+  `ano_lancamento` int NOT NULL,
   `genero` varchar(100) DEFAULT NULL,
   `sinopse` text,
   `tipo_midia` varchar(50) NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE `item_midia` (
 
 LOCK TABLES `item_midia` WRITE;
 /*!40000 ALTER TABLE `item_midia` DISABLE KEYS */;
-INSERT INTO `item_midia` VALUES (1,'t','t',2000,'d','d','Livro'),(2,'Avengers','Tony Stark',2012,'FicÃ§Ã£o CientÃ­fica','Nick Fury junta os Vingadores','Livro');
+-- INSERT INTO `item_midia` VALUES (1,'t','t',2000,'d','d','Livro'),(2,'Avengers','Tony Stark',2012,'FicÃ§Ã£o CientÃ­fica','Nick Fury junta os Vingadores','Livro');
 /*!40000 ALTER TABLE `item_midia` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

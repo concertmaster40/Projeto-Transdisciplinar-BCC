@@ -18,13 +18,7 @@ public class ItemMidiaDAO {
 
             stmt.setString(1, item.getTitulo());
             stmt.setString(2, item.getAutorDiretor());
-            
-            if (item.getAnoLancamento() != null) {
-                stmt.setInt(3, item.getAnoLancamento());
-            } else {
-                stmt.setNull(3, java.sql.Types.INTEGER);
-            }
-            
+            stmt.setInt(3, item.getAnoLancamento());
             stmt.setString(4, item.getGenero());
             stmt.setString(5, item.getSinopse());
             stmt.setString(6, item.getTipoMidia());
@@ -59,40 +53,29 @@ public class ItemMidiaDAO {
     }
 
     // Método UPDATE no banco
-
-    // Método UPDATE no banco
     public void update(ItemMidia item) {
         String sql = "UPDATE item_midia SET titulo = ?, autor_diretor = ?, ano_lancamento = ?, genero = ?, sinopse = ?, tipo_midia = ? WHERE id = ?";
-    
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
+
             // Substituindo as interrogações para a atualização
             stmt.setString(1, item.getTitulo());
             stmt.setString(2, item.getAutorDiretor());
-            
-            // Tratamento para valor nulo do ano
-            if (item.getAnoLancamento() != null) {
-                stmt.setInt(3, item.getAnoLancamento());
-            } else {
-                stmt.setNull(3, java.sql.Types.INTEGER);
-            }
-        
+            stmt.setInt(3, item.getAnoLancamento());
             stmt.setString(4, item.getGenero());
             stmt.setString(5, item.getSinopse());
             stmt.setString(6, item.getTipoMidia());
-        
-            // O ID é o último parâmetro (7º '?' da cláusula WHERE)
             stmt.setInt(7, item.getId());
-        
+
             int linhasAfetadas = stmt.executeUpdate();
-        
+
             if (linhasAfetadas > 0) {
                 System.out.println("Item atualizado com sucesso!");
             } else {
                 System.out.println("Nenhum item encontrado com o ID informado (" + item.getId() + ").");
             }
-        
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar item no banco: " + e.getMessage());
         }
@@ -117,6 +100,26 @@ public class ItemMidiaDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao deletar item do banco: " + e.getMessage());
         }
+    }
+
+    // Método para listar todos os itens
+    public java.util.List<ItemMidia> readAll() {
+        String sql = "SELECT * FROM item_midia";
+        java.util.List<ItemMidia> lista = new java.util.ArrayList<>();
+    
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                lista.add(mapearItemMidia(rs)); // Reutiliza seu método de mapeamento!
+            }
+        
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar itens do banco: " + e.getMessage());
+        }
+    
+        return lista;
     }
 
     // Método utilitário para mapear mídias
