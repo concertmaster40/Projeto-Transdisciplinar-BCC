@@ -11,8 +11,10 @@
 <body>
     <h2>Catálogo de Mídias (Todos os Itens)</h2>
     
-    <a href="cadastrarItem.jsp"> + Cadastrar Novo Item</a>
-    <br><br>
+    <div style="margin-bottom: 20px;">
+        <a href="index.jsp" class="btn" style="background-color: #64748b;">🏠 Início</a>
+        <a href="cadastrarItem.jsp" class="btn" style="margin-left: 10px;">➕ Cadastrar Novo Item</a>
+    </div>
 
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>

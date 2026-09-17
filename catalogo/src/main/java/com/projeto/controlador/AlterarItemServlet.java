@@ -23,20 +23,24 @@ public class AlterarItemServlet extends HttpServlet {
         String idString = request.getParameter("id");
 
         if (idString != null && !idString.isEmpty()) {
-            Integer id = Integer.parseInt(idString);
-            ItemMidiaDAO dao = new ItemMidiaDAO();
-            ItemMidia item = dao.read(id);
+            try {
+                Integer id = Integer.parseInt(idString);
+                ItemMidiaDAO dao = new ItemMidiaDAO();
+                ItemMidia item = dao.read(id);
 
-            // Se o item existir no banco, envia para a JSP
-            if (item != null) {
-                request.setAttribute("item", item);
-                request.getRequestDispatcher("editarItem.jsp").forward(request, response);
-                return;
+                // Se o item existir no banco, envia para a JSP
+                if (item != null) {
+                    request.setAttribute("item", item);
+                    request.getRequestDispatcher("editarItem.jsp").forward(request, response);
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                // ID inválido
             }
         }
         
         // Caso o ID seja inválido ou não encontrado
-        response.sendRedirect("listar");
+        response.sendRedirect("listarItens");
     }
 
     // 2. doPost: Recebe o formulário com os dados alterados e faz o UPDATE
@@ -46,32 +50,37 @@ public class AlterarItemServlet extends HttpServlet {
         
         request.setCharacterEncoding("UTF-8");
 
-        // Capturando o id e os campos do formulário
-        Integer id = Integer.parseInt(request.getParameter("id"));
-        String titulo = request.getParameter("titulo");
-        String autorDiretor = request.getParameter("autor_diretor");
-        String anoString = request.getParameter("ano_lancamento");
-        String genero = request.getParameter("genero");
-        String tipoMidia = request.getParameter("tipo_midia");
-        String sinopse = request.getParameter("sinopse");
-
-        Integer anoLancamento = null;
-        if (anoString != null && !anoString.isEmpty()) {
-            anoLancamento = Integer.parseInt(anoString);
-        }
-
-        // Instancia o objeto já com o ID
-        ItemMidia item = new ItemMidia(anoLancamento, autorDiretor, genero, sinopse, tipoMidia, titulo);
-        item.setId(id);
-
         try {
+            // Capturando o id e os campos do formulário
+            Integer id = Integer.parseInt(request.getParameter("id"));
+            String titulo = request.getParameter("titulo");
+            String autorDiretor = request.getParameter("autor_diretor");
+            String anoString = request.getParameter("ano_lancamento");
+            String genero = request.getParameter("genero");
+            String tipoMidia = request.getParameter("tipo_midia");
+            String sinopse = request.getParameter("sinopse");
+
+            Integer anoLancamento = null;
+            if (anoString != null && !anoString.isEmpty()) {
+                anoLancamento = Integer.parseInt(anoString);
+            }
+
+            // Instancia o objeto já com o ID
+            ItemMidia item = new ItemMidia(anoLancamento, autorDiretor, genero, sinopse, tipoMidia, titulo);
+            item.setId(id);
+
             ItemMidiaDAO dao = new ItemMidiaDAO();
             dao.update(item);
 
             response.setContentType("text/html;charset=UTF-8");
             PrintWriter out = response.getWriter();
-            out.println("<h3>Item '" + titulo + "' atualizado com sucesso!</h3>");
-            out.println("<a href='listar'>Voltar para a lista</a>");
+            out.println("<!DOCTYPE html>");
+            out.println("<html><head><meta charset='UTF-8'><title>Sucesso - Edição</title><link rel='stylesheet' type='text/css' href='css/estilo.css'></head><body>");
+            out.println("<div class='card' style='text-align:center;'>");
+            out.println("<h2>✅ Item '" + titulo + "' atualizado com sucesso!</h2><br>");
+            out.println("<a class='btn' href='listarItens'>Voltar para a Lista</a> ");
+            out.println("<a class='btn' href='index.jsp' style='background-color: #64748b; margin-left: 10px;'>Página Inicial</a>");
+            out.println("</div></body></html>");
 
         } catch (Exception e) {
             throw new ServletException("Erro ao atualizar o item: " + e.getMessage());

@@ -27,7 +27,8 @@
         <form action="excluir" method="POST">
             <input type="hidden" name="id" value="<%= item.getId() %>">
             <button type="submit">Confirmar Exclusão</button>
-            <a href="listarItens">Cancelar</a>
+            <a href="listarItens" class="btn" style="background-color: #64748b; margin-left: 10px;">Cancelar</a>
+            <a href="index.jsp" style="margin-left: 15px;">Página Inicial</a>
         </form>
 
     <% 
@@ -41,7 +42,8 @@
             <input type="number" id="id" name="id" min="1" required placeholder="Ex: 1"><br><br>
 
             <button type="submit">Excluir Item</button>
-            <a href="listarItens">Cancelar</a>
+            <a href="listarItens" class="btn" style="background-color: #64748b; margin-left: 10px;">Cancelar</a>
+            <a href="index.jsp" style="margin-left: 15px;">Página Inicial</a>
         </form>
     <% 
         } 
