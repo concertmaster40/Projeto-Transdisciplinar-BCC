@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cadastrar Item - Catálogo</title>
+    <link rel="stylesheet" type="text/css" href="css/estilo.css">
 </head>
 <body>
     <h2>Cadastrar Novo Item no Catálogo</h2>
@@ -33,6 +34,8 @@
         <textarea name="sinopse" rows="4" cols="30"></textarea><br><br>
 
         <button type="submit">Salvar Item</button>
+        <a href="listarItens" class="btn" style="background-color: #64748b; margin-left: 10px;">Ver Todos os Itens</a>
+        <a href="index.jsp" style="margin-left: 15px;">Página Inicial</a>
     </form>
 </body>
 </html>

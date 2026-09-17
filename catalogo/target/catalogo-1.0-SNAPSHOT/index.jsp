@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Home - Catálogo de Mídias</title>
+    <link rel="stylesheet" type="text/css" href="css/estilo.css">
 </head>
 <body>
 
@@ -18,7 +19,7 @@
             <h2>
                 <a href="listarItens">📋 Ver Listagem Completa</a>
             </h2>
-            <p>Visualizar a tabela com todas as mídias cadastradas, editar ou excluir registros.</p>
+            <p>Visualizar a tabela com todas as mídias cadastradas, ver detalhes, editar ou excluir registros.</p>
         </div>
 
         <br>
@@ -45,9 +46,27 @@
 
         <br>
 
-        <!-- 4. Deletar um item diretamente por ID -->
+        <!-- 4. Editar um item por ID -->
         <div>
-            <h2>🗑️ Excluir Item por ID</h2>
+            <h2>
+                <a href="editarItem.jsp">✏️ Editar Item por ID</a>
+            </h2>
+            <p>Carregue os dados de um item existente para atualizar suas informações.</p>
+            <form action="alterar" method="GET">
+                <label for="inputIdEditar">Digite o ID do item a ser editado:</label>
+                <input type="number" id="inputIdEditar" name="id" min="1" required placeholder="Ex: 1">
+                <button type="submit">Editar Registro</button>
+            </form>
+        </div>
+
+        <br>
+
+        <!-- 5. Deletar um item diretamente por ID -->
+        <div>
+            <h2>
+                <a href="deletarItem.jsp">🗑️ Excluir Item por ID</a>
+            </h2>
+            <p>Remover permanentemente um registro do banco de dados informando seu ID.</p>
             <form action="excluir" method="GET" onsubmit="return confirm('Tem certeza que deseja excluir este item?');">
                 <label for="inputIdExcluir">Digite o ID a ser excluído:</label>
                 <input type="number" id="inputIdExcluir" name="id" min="1" required placeholder="Ex: 1">
