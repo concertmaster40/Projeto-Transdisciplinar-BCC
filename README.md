@@ -1,192 +1,104 @@
-Viewed DBConnection.java:1-21
-Viewed App.java:1-14
-Listed directory banco_de_dados
-Viewed catalogo_db.sql:1-59
+# Catálogo de Mídias - Aplicação Web Java
 
-Esta é a explicação completa da arquitetura do projeto **Catálogo de Mídias**, detalhando o padrão arquitetural, cada arquivo **`.java`**, **`.jsp`** e **`.css`**, e aprofundando nos conceitos de **POO**, **Servlets**, **JSP**, **JDBC** e **Prevenção de SQL Injection**.
+Aplicação web em Java para gerenciamento e catalogação de itens de mídia (livros e filmes), desenvolvida como projeto prático transdisciplinar em Ciência da Computação.
 
 ---
 
-## 🏛️ 1. Visão Geral da Arquitetura (MVC + DAO)
+## Tecnologias Utilizadas
 
-O projeto adota o padrão de arquitetura **MVC (Model-View-Controller)** combinado com o padrão de projeto **DAO (Data Access Object)**:
-
-```
-                  ┌──────────────────────────────────────────────────┐
-                  │                 Navegador (Client)               │
-                  └─────────┬──────────────────────────────▲─────────┘
-                            │ Requisição HTTP              │ Resposta HTML
-                            ▼                              │
-                  ┌────────────────────────────────────────┴─────────┐
-                  │          CONTROLLER (Java Servlets)              │
-                  │  (Cadastrar, Listar, Alterar, Deletar Servlets)  │
-                  └─────────┬──────────────────────────────▲─────────┘
-                            │                              │
-             Manipula Dados │               Passa Modelos  │ Renderiza
-                            ▼               via Request    │
-┌──────────────────────────────────────┐       ┌───────────┴──────────┐
-│      MODEL & PERSISTENCE LAYER       │       │    VIEW (JSP + CSS)  │
-│  - Modelo: ItemMidia (JavaBean)      │       │  - index.jsp         │
-│  - DAO: ItemMidiaDAO (CRUD / JDBC)   │       │  - listarItens.jsp   │
-│  - Conexão: DBConnection (Driver)    │       │  - editarItem.jsp    │
-│  - Banco de Dados: MySQL             │       │  - estilo.css        │
-└──────────────────────────────────────┘       └──────────────────────┘
-```
+* **Linguagem**: Java (JDK)
+* **Web**: Java Servlets (`javax.servlet`) & JavaServer Pages (JSP)
+* **Persistência**: JDBC (Java Database Connectivity)
+* **Banco de Dados**: MySQL
+* **Estilização**: CSS3
+* **Servidor**: Apache Tomcat
 
 ---
 
-## ☕ 2. Camada de Modelo e Persistência (`.java`)
+## Estrutura e Arquitetura do Sistema
 
-### 📦 A. Modelo (POO e Encapsulamento)
-#### 📄 [ItemMidia.java](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/java/com/projeto/modelo/ItemMidia.java)
-- **Papel**: Representa o objeto de negócio do domínio (Entidade / JavaBean).
-- **Conceitos de POO aplicados**:
-  - **Encapsulamento**: Todos os atributos (`id`, `titulo`, `autorDiretor`, `anoLancamento`, `genero`, `sinopse`, `tipoMidia`) são declarados como `private`. O acesso e a modificação só ocorrem de forma controlada através de métodos públicos `getters` e `setters`.
-  - **Construtores**:
-    - Construtor padrão sem argumentos (`public ItemMidia()`), exigido pelas convenções de JavaBeans.
-    - Construtor sobrecarregado parametrizado para instanciar mídias diretamente antes de persistir no banco.
-  - **Sobrescrita de Métodos (`@Override`)**: Sobrescreve `toString()` da classe `Object` utilizando `StringBuilder` para representação textual e debugging eficiente sem alocação desnecessária de strings na memória Heap.
+O projeto adota uma arquitetura web direta baseada no padrão **DAO (Data Access Object)** para separação de persistência e **Servlets** para manipulação das requisições HTTP:
+
+[ Navegador ] <---> [ Servlets (HTTP GET/POST) ] <---> [ ItemMidiaDAO (JDBC) ] <---> [ MySQL ]
+│
+▼
+[ Páginas JSP (View) ]
 
 ---
 
-### 🗄️ B. Conexão e DAO (JDBC e Prevenção de SQL Injection)
-#### 📄 [DBConnection.java](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/java/com/projeto/dao/DBConnection.java)
-- **Papel**: Centralizar a criação e o fornecimento de conexões com o banco MySQL.
-- **Conceitos de JDBC**:
-  - `Class.forName("com.mysql.cj.jdbc.Driver")`: Carrega explicitamente a classe do driver JDBC do MySQL no ClassLoader.
-  - `DriverManager.getConnection(URL, USUARIO, SENHA)`: Cria e retorna uma instância ativa da interface `java.sql.Connection`.
-  - Tratamento centralizado de `SQLException` convertendo-a em `RuntimeException` para evitar tratamento redundante de checked exceptions nas camadas superiores.
+## 1. Camada de Modelo e Persistência (`src/main/java/com/projeto/`)
 
-#### 📄 [ItemMidiaDAO.java](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/java/com/projeto/dao/ItemMidiaDAO.java)
-- **Papel**: Implementa o padrão **DAO (Data Access Object)**, isolando todas as instruções SQL e regras de persistência da camada de controle.
-- **Operações CRUD implementadas**:
-  1. `insert(ItemMidia item)` -> **Create** (`INSERT INTO item_midia ...`)
-  2. `read(Integer id)` -> **Read Unitário** (`SELECT * FROM item_midia WHERE id = ?`)
-  3. `readAll()` -> **Read Completo** (`SELECT * FROM item_midia`)
-  4. `update(ItemMidia item)` -> **Update** (`UPDATE item_midia SET ... WHERE id = ?`)
-  5. `delete(Integer id)` -> **Delete** (`DELETE FROM item_midia WHERE id = ?`)
+### Modelo (`/modelo/ItemMidia.java`)
+* **Papel**: Classe JavaBean que representa o objeto de domínio (livro ou filme).
+* **Conceitos aplicados**:
+  * **Encapsulamento**: Atributos privados (`id`, `titulo`, `autorDiretor`, `anoLancamento`, `genero`, `sinopse`, `tipoMidia`) acessados exclusivamente via métodos `getters` e `setters`.
+  * **Construtores**: Construtor padrão (sem argumentos) e parametrizado para rápida instanciação.
+  * **Sobrescrita (`@Override`)**: Método `toString()` sobrescrito com `StringBuilder` para depuração eficiente.
 
-#### 🛡️ Segurança: Como o DAO previne SQL Injection
-> [!IMPORTANT]
-> **Por que `PreparedStatement` é seguro contra SQL Injection?**
-> Se o código concatenasse strings (ex: `"WHERE id = " + idString`), um invasor poderia enviar `' OR '1'='1` ou comandos destrutivos como `; DROP TABLE item_midia;`.
->
-> Com `PreparedStatement`, a query SQL é enviada ao motor do banco com placeholders **`?`** (parâmetros posicionais). O banco de dados **pré-compila** o plano de execução SQL primeiro. Depois, métodos como `stmt.setString(1, ...)` e `stmt.setInt(7, ...)` tratam os dados estritamente como literais/valores, e nunca como código executável.
-
-- **Gerenciamento de Recursos com `try-with-resources`**:
-  - `Connection`, `PreparedStatement` e `ResultSet` implementam a interface `AutoCloseable`.
-  - Ao declarar `try (Connection conn = ...; PreparedStatement stmt = ...)`, o Java garante que os sockets de conexão e cursores de memória do banco serão fechados automaticamente ao término do bloco, mesmo que ocorra uma exceção, evitando vazamento de conexões (*Connection Leaks*).
-- **Mapeamento Objeto-Relacional Manual**: O método utilitário `mapearItemMidia(ResultSet rs)` extrai as colunas da tabela relacional e preenche a instância da classe [ItemMidia](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/java/com/projeto/modelo/ItemMidia.java).
+### Acesso a Dados (`/dao/`)
+* **`DBConnection.java`**: Centraliza a criação de conexões com o MySQL via `DriverManager.getConnection()`. Carrega o driver `com.mysql.cj.jdbc.Driver` e trata exceções de conexão (`SQLException`).
+* **`ItemMidiaDAO.java`**: Implementa o padrão **DAO**, isolando toda a lógica SQL da aplicação.
+  * `insert(ItemMidia item)`: Insere um novo registro.
+  * `read(Integer id)`: Busca um registro específico por ID.
+  * `readAll()`: Retorna a lista completa de mídias.
+  * `update(ItemMidia item)`: Atualiza os dados de um registro existente.
+  * `delete(Integer id)`: Remove um registro pelo ID.
 
 ---
 
-## 🚦 3. Camada Controladora (`Servlets`)
+## 2. Considerações de Segurança e Boas Práticas
 
-Todas as Servlets herdam de `javax.servlet.http.HttpServlet` e utilizam anotações `@WebServlet` para roteamento de URLs sem necessidade de mapeamentos manuais extensos no `web.xml`.
+### Prevenção contra SQL Injection
+* **Uso de `PreparedStatement`**: Todas as consultas e manipulações no banco de dados utilizam instruções pré-compiladas com parâmetros rotulados por `?`.
+* **Tratamento de Dados**: Evita a concatenação direta de strings nas queries SQL. O driver JDBC trata os dados inseridos pelos usuários estritamente como literais, impedindo a execução de códigos maliciosos na consulta.
 
-```
-Requisição HTTP (GET/POST)
-       │
-       ▼
-HttpServlet (service()) ───► Direciona para doGet() ou doPost()
-                                    │
-                         ┌──────────┴──────────┐
-                         ▼                     ▼
-               Processa Parâmetros       Interage com DAO
-                         │                     │
-                         └──────────┬──────────┘
-                                    ▼
-                 RequestDispatcher.forward() OU response.sendRedirect()
-```
-
-### 📄 [CadastrarItemServlet.java](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/java/com/projeto/controlador/CadastrarItemServlet.java) (`/cadastrar`)
-- **Método `doPost`**: 
-  - Recebe os dados do formulário via `request.getParameter()`.
-  - Faz a conversão de tipo (*parsing*) de `String` para `Integer` no campo de ano.
-  - Instancia um novo `ItemMidia`, aciona `dao.insert(item)` e retorna confirmação com links de navegação.
-
-### 📄 [ListarItensServlet.java](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/java/com/projeto/controlador/ListarItensServlet.java) (`/listarItens`)
-- **Método `doGet` e `doPost`**:
-  - Consulta o banco chamando `dao.readAll()`, obtendo um `List<ItemMidia>`.
-  - Armazena a lista no escopo da requisição com `request.setAttribute("itens", listaItens)`.
-  - Faz o **Forward** (`request.getRequestDispatcher("listarItens.jsp").forward(request, response)`), transferindo os dados para a página JSP no lado do servidor sem alterar a URL do cliente.
-
-### 📄 [ListarItemServlet.java](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/java/com/projeto/controlador/ListarItemServlet.java) (`/listarItem`)
-- **Método `doGet`**:
-  - Obtém o parâmetro `id` da URL (ex: `listarItem?id=2`).
-  - Executa `dao.read(id)`.
-  - Se o item existir, despacha para [listarItem.jsp](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/webapp/listarItem.jsp) com `request.setAttribute("item", item)`. Caso contrário, redireciona para `listarItens`.
-
-### 📄 [AlterarItemServlet.java](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/java/com/projeto/controlador/AlterarItemServlet.java) (`/alterar`)
-- **Método `doGet` (Preparação)**:
-  - Recebe o `id` do item a ser editado.
-  - Busca os dados atuais no banco com `dao.read(id)`.
-  - Anexa o objeto `item` ao `request` e encaminha via `forward` para [editarItem.jsp](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/webapp/editarItem.jsp) para preencher o formulário.
-- **Método `doPost` (Execução)**:
-  - Configura `request.setCharacterEncoding("UTF-8")` para suporte correto a acentuação.
-  - Lê todos os campos atualizados enviados pelo formulário, incluindo o `id` oculto (*hidden*).
-  - Executa `dao.update(item)` e renderiza a tela de sucesso com opções de retorno.
-
-### 📄 [DeletarItemServlet.java](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/java/com/projeto/controlador/DeletarItemServlet.java) (`/excluir`)
-- **Método `doGet`**:
-  - Captura o `id` enviado por parâmetro.
-  - Executa a remoção física com `dao.delete(id)`.
-  - Apresenta feedback de sucesso com link de retorno à lista.
+### Gerenciamento de Recursos
+* **`try-with-resources`**: As conexões (`Connection`), instruções (`PreparedStatement`) e resultados (`ResultSet`) são declarados dentro do bloco `try (...)`. Como implementam `AutoCloseable`, são encerrados automaticamente ao final da execução, prevenindo vazamentos de memória e conexões abertas (*Connection Leaks*).
 
 ---
 
-## 🖥️ 4. Camada de Apresentação (`.jsp`)
+## 3. Controladores (`/controlador/`)
 
-As páginas JSP atuam como a **View** no padrão MVC. Elas combinam HTML5 com Scriptlets Java (`<% ... %>`) e expressões de saída (`<%= ... %>`) para renderização dinâmica:
+As Servlets mapeiam as rotas do sistema e tratam as requisições HTTP:
 
-### 📄 [index.jsp](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/webapp/index.jsp)
-- **Menu Central da Aplicação**:
-  - **Opção 1**: Link direto para a servlet `listarItens`.
-  - **Opção 2**: Link direto para a tela de cadastro [cadastrarItem.jsp](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/webapp/cadastrarItem.jsp).
-  - **Opção 3**: Formulário de consulta rápida por ID (submete `GET` para `listarItem`).
-  - **Opção 4**: Seção de edição por ID (link para [editarItem.jsp](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/webapp/editarItem.jsp) e formulário `GET` para a servlet `alterar`).
-  - **Opção 5**: Formulário de exclusão rápida por ID (submete `GET` para `excluir` com confirmação via JavaScript `onsubmit`).
-
-### 📄 [listarItens.jsp](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/webapp/listarItens.jsp)
-- Recupera a lista com `(List<ItemMidia>) request.getAttribute("itens")`.
-- Itera sobre a coleção através de um laço `for (ItemMidia item : itens)` gerando dinamicamente linhas `<tr>` na tabela HTML.
-- Fornece botões de ação contextuais por linha para **Ver Detalhes** (`listarItem?id=...`), **Editar** (`alterar?id=...`) e **Excluir** (`excluir?id=...`).
-
-### 📄 [editarItem.jsp](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/webapp/editarItem.jsp)
-- **Renderização Condicional**:
-  - **Se `item != null`**: Exibe o formulário de edição com os dados atuais já carregados nos inputs (`value="<%= item.getTitulo() %>"`), pré-seleciona a opção correta no `<select>` de tipo de mídia e inclui o `<input type="hidden" name="id">`.
-  - **Se `item == null`**: Exibe um formulário de busca para que o usuário informe o ID do item que deseja carregar.
-
-### 📄 [listarItem.jsp](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/webapp/listarItem.jsp)
-- Exibe a ficha completa da mídia em formato de cartão (`.card`), incluindo detalhes como sinopse e autor.
-- Disponibiliza atalhos para editar o item exibido ou retornar à listagem.
-
-### 📄 [cadastrarItem.jsp](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/webapp/cadastrarItem.jsp)
-- Formulário HTML limpo que submete via `POST` para o endpoint `/cadastrar`.
-
-### 📄 [deletarItem.jsp](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/webapp/deletarItem.jsp)
-- Tela de suporte para confirmação de exclusão ou exclusão manual informando ID.
+* **`CadastrarItemServlet` (`/cadastrar`)**: Recebe via `POST` os dados do formulário, converte tipos de dados (ex: `String` para `Integer` em ano) e invoca `dao.insert()`.
+* **`ListarItensServlet` (`/listarItens`)**: Executa `dao.readAll()`, armazena a lista no escopo da requisição (`request.setAttribute`) e encaminha o fluxo para a visualização via `forward`.
+* **`ListarItemServlet` (`/listarItem`)**: Captura o parâmetro `id` via `GET`, busca a mídia correspondente via `dao.read()` e redireciona para a tela de detalhes.
+* **`AlterarItemServlet` (`/alterar`)**:
+  * **`doGet`**: Recupera o ID do item e encaminha os dados atuais para preenchimento do formulário de edição.
+  * **`doPost`**: Lê os dados atualizados do formulário e executa `dao.update()`.
+* **`DeletarItemServlet` (`/excluir`)**: Recebe o ID via `GET` e executa a exclusão física com `dao.delete()`.
 
 ---
 
-## 🎨 5. Estilização Centralizada (`.css`)
+## 4. Interface de Usuário (`src/main/webapp/`)
 
-### 📄 [estilo.css](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/webapp/css/estilo.css)
-- **Reset Global e Tipografia**: Define `box-sizing: border-box`, margens zeradas e a família tipográfica moderna `'Segoe UI', sans-serif`.
-- **Layout Flexbox**: O `body` é configurado com `display: flex; flex-direction: column; align-items: center;` garantindo que todos os formulários, tabelas e cabeçalhos fiquem centralizados com largura máxima de `800px`.
-- **Componentes Reutilizáveis**:
-  - `.card`: Caixas brancas com bordas arredondadas e sombras suaves (`box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05)`).
-  - Formulários (`form`, `input`, `select`, `textarea`): Campos em largura total com transição suave e foco estilizado (`:focus`).
-  - Botões (`button`, `.btn`): Estilização em azul primário (`#2563eb`) com estados de `:hover`.
-  - Tabelas (`table`, `th`, `td`): Cabeçalho escuro (`#1e293b`), linhas zebradas com `nth-child(even)` e efeito hover (`#f1f5f9`).
+Páginas JSP responsáveis por renderizar dinamicamente o HTML:
+
+* **`index.jsp`**: Menu principal com atalhos para cadastro, listagem, buscas e exclusão por ID.
+* **`listarItens.jsp`**: Exibe a tabela completa de mídias cadastradas com botões de ação (Detalhes, Editar e Excluir) por linha.
+* **`listarItem.jsp`**: Renderiza a ficha detalhada de um item em formato de cartão (`.card`).
+* **`cadastrarItem.jsp`**: Formulário de envio de novos dados.
+* **`editarItem.jsp`**: Formulário dinâmico pré-carregado com as informações do item selecionado para alteração.
+* **`deletarItem.jsp`**: Interface de confirmação e suporte para exclusão de registros.
+* **`css/estilo.css`**: Arquivo de estilização centralizado (layout Flexbox, estilização de tabelas, cartões e botões).
 
 ---
 
-## 🔄 6. Resumo das Diferenças Críticas no Java Web
+## 5. Script do Banco de Dados
 
-| Conceito | `RequestDispatcher.forward()` | `HttpServletResponse.sendRedirect()` |
-| :--- | :--- | :--- |
-| **Local de Execução** | No servidor (Server-side) | No cliente / navegador (Client-side) |
-| **Requisição HTTP** | Mesma requisição mantida (`request.getAttribute` preservado) | Nova requisição HTTP (código 302, atributos do `request` são reiniciados) |
-| **URL no Navegador** | Não muda | Muda para o novo endereço |
-| **Uso no Projeto** | Enviar do Servlet para a JSP ([ListarItensServlet](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/java/com/projeto/controlador/ListarItensServlet.java) -> [listarItens.jsp](file:///c:/Users/nicolas.jackel/Desktop/Projeto-Transdisciplinar-BCC/catalogo/src/main/webapp/listarItens.jsp)) | Redirecionamento após erro ou ID inválido |
+O script para criação do banco de dados e da tabela principal encontra-se em `banco_de_dados/catalogo_db.sql`:
+
+```sql
+CREATE DATABASE IF NOT EXISTS catalogo_db;
+USE catalogo_db;
+
+CREATE TABLE IF NOT EXISTS item_midia (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    autor_diretor VARCHAR(255) NOT NULL,
+    ano_lancamento INT NOT NULL,
+    genero VARCHAR(100) NOT NULL,
+    sinopse TEXT,
+    tipo_midia VARCHAR(50) NOT NULL
+);
