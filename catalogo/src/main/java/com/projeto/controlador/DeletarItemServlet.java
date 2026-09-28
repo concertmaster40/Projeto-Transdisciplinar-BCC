@@ -10,10 +10,27 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-// A anotação abaixo diz qual URL aciona esta classe (ex: action="excluir" ou link/botão)
+/**
+ * Servlet responsável por processar a exclusão de itens de mídia do catálogo.
+ * <p>
+ * Recebe o ID do item a ser removido via parâmetro de requisição e invoca a operação
+ * de deleção no {@link ItemMidiaDAO}.
+ * </p>
+ * 
+ * @author Nicolas Andreas Jackel
+ * @version 1.0
+ */
 @WebServlet("/excluir")
 public class DeletarItemServlet extends HttpServlet {
 
+    /**
+     * Processa a requisição GET para exclusão de um item de mídia identificado pelo seu ID.
+     * 
+     * @param request  objeto {@link HttpServletRequest} contendo o parâmetro {@code id} do item
+     * @param response objeto {@link HttpServletResponse} para envio da resposta HTML de confirmação
+     * @throws ServletException se ocorrer um erro durante a operação de exclusão
+     * @throws IOException      se ocorrer um erro de entrada/saída durante a resposta
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         

@@ -1,5 +1,12 @@
 package com.projeto.modelo;
 
+/**
+ * Classe base do Item de Mídia, nela se~rao declaradas todas as variáveis existentes e 
+ * os métodos getters e setters, seguindo o padrão de POO
+ * 
+ * @author Nicolas Andreas Jackel
+ * @version 1.0
+ */
 public class ItemMidia{
 
     private Integer id;
@@ -10,8 +17,14 @@ public class ItemMidia{
     private String sinopse;
     private String tipoMidia;
 
+    /**
+     * Construtor do objeto ItemMidia vazio, necessário para inicialização e conformidade com o padrão JavaBeans.
+     */
     public ItemMidia(){}
 
+    /**
+     * Construtor do objeto ItemMidia cheio, responsável por inicializar todas as variáveis com os valores passados por parâmetro
+     */
     public ItemMidia(Integer anoLancamento, String autorDiretor, String genero, String sinopse, String tipoMidia, String titulo) {
         this.anoLancamento = anoLancamento;
         this.autorDiretor = autorDiretor;

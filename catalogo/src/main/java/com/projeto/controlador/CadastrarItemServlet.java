@@ -11,10 +11,27 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-// A anotação abaixo diz qual URL aciona esta classe (a mesma do 'action' no formulário)
+/**
+ * Servlet responsável por processar o cadastro de novos itens de mídia.
+ * <p>
+ * Recebe os dados informados no formulário de cadastro, instancia o objeto
+ * {@link ItemMidia} e o persiste no banco de dados através de {@link ItemMidiaDAO}.
+ * </p>
+ * 
+ * @author Nicolas Andreas Jackel
+ * @version 1.0
+ */
 @WebServlet("/cadastrar")
 public class CadastrarItemServlet extends HttpServlet {
 
+    /**
+     * Processa a requisição POST enviada pelo formulário de cadastro, criando um novo item no banco.
+     * 
+     * @param request  objeto {@link HttpServletRequest} contendo os dados do item enviados via formulário
+     * @param response objeto {@link HttpServletResponse} para envio da resposta HTML ao cliente
+     * @throws ServletException se ocorrer um erro durante a criação ou persistência do item
+     * @throws IOException      se ocorrer um erro de entrada/saída durante o processamento
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         

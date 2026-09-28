@@ -7,9 +7,21 @@ import java.sql.SQLException;
 
 import com.projeto.modelo.ItemMidia;
 
+/**
+ * Data Access Object (DAO) responsável por gerenciar as operações de persistência
+ * e manipulação de dados da entidade {@link ItemMidia} na tabela {@code item_midia}.
+ * 
+ * @author Nicolas Andreas Jackel
+ * @version 1.0
+ */
 public class ItemMidiaDAO {
 
-    // Método CREATE no banco
+    /**
+     * Insere um novo registro de item de mídia no banco de dados.
+     * 
+     * @param item objeto {@link ItemMidia} contendo as informações a serem persistidas
+     * @throws RuntimeException caso ocorra um erro na execução do comando SQL
+     */
     public void insert(ItemMidia item) {
         String sql = "INSERT INTO item_midia (titulo, autor_diretor, ano_lancamento, genero, sinopse, tipo_midia) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -31,28 +43,39 @@ public class ItemMidiaDAO {
         }
     }
 
-    // Método READ no banco (retorna ItemMidia em vez de void)
+    /**
+     * Consulta um item de mídia específico no banco de dados com base em seu identificador.
+     * 
+     * @param id identificador único do item de mídia a ser consultado
+     * @return o objeto {@link ItemMidia} correspondente se encontrado, ou {@code null} caso contrário
+     * @throws RuntimeException caso ocorra um erro na execução da consulta SQL
+     */
     public ItemMidia read(Integer id) {
-    String sql = "SELECT * FROM item_midia WHERE id = ?";
+        String sql = "SELECT * FROM item_midia WHERE id = ?";
 
-    try (Connection conn = DBConnection.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        stmt.setInt(1, id);
+            stmt.setInt(1, id);
 
-        try (ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                return mapearItemMidia(rs); // Limpo e direto
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapearItemMidia(rs); // Limpo e direto
+                }
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar item no banco: " + e.getMessage());
         }
-
-    } catch (SQLException e) {
-        throw new RuntimeException("Erro ao buscar item no banco: " + e.getMessage());
-    }
-    return null;
+        return null;
     }
 
-    // Método UPDATE no banco
+    /**
+     * Atualiza os dados de um registro de item de mídia existente no banco de dados.
+     * 
+     * @param item objeto {@link ItemMidia} com os dados atualizados e o ID preenchido
+     * @throws RuntimeException caso ocorra um erro durante a atualização no banco de dados
+     */
     public void update(ItemMidia item) {
         String sql = "UPDATE item_midia SET titulo = ?, autor_diretor = ?, ano_lancamento = ?, genero = ?, sinopse = ?, tipo_midia = ? WHERE id = ?";
 
@@ -81,7 +104,12 @@ public class ItemMidiaDAO {
         }
     }
 
-    // Método DELETE no banco
+    /**
+     * Remove um item de mídia do banco de dados pelo seu identificador.
+     * 
+     * @param id identificador único do item a ser excluído
+     * @throws RuntimeException caso ocorra uma falha na exclusão SQL
+     */
     public void delete(Integer id) {
         String sql = "DELETE FROM item_midia WHERE id = ?";
 
@@ -102,7 +130,12 @@ public class ItemMidiaDAO {
         }
     }
 
-    // Método para listar todos os itens
+    /**
+     * Recupera todos os itens de mídia cadastrados no banco de dados.
+     * 
+     * @return lista contendo os objetos {@link ItemMidia} encontrados, ou uma lista vazia caso não haja registros
+     * @throws RuntimeException caso ocorra um erro durante a consulta SQL
+     */
     public java.util.List<ItemMidia> readAll() {
         String sql = "SELECT * FROM item_midia";
         java.util.List<ItemMidia> lista = new java.util.ArrayList<>();
@@ -122,16 +155,22 @@ public class ItemMidiaDAO {
         return lista;
     }
 
-    // Método utilitário para mapear mídias
+    /**
+     * Mapeia os dados da linha atual de um {@link ResultSet} para uma nova instância de {@link ItemMidia}.
+     * 
+     * @param rs objeto {@link ResultSet} posicionado no registro atual
+     * @return nova instância preenchida de {@link ItemMidia}
+     * @throws SQLException se houver erro ao acessar as colunas do {@link ResultSet}
+     */
     private ItemMidia mapearItemMidia(ResultSet rs) throws SQLException {
-    ItemMidia item = new ItemMidia();
-    item.setId(rs.getInt("id"));
-    item.setTitulo(rs.getString("titulo"));
-    item.setAutorDiretor(rs.getString("autor_diretor"));
-    item.setAnoLancamento(rs.getInt("ano_lancamento"));
-    item.setGenero(rs.getString("genero"));
-    item.setSinopse(rs.getString("sinopse"));
-    item.setTipoMidia(rs.getString("tipo_midia"));
-    return item;
+        ItemMidia item = new ItemMidia();
+        item.setId(rs.getInt("id"));
+        item.setTitulo(rs.getString("titulo"));
+        item.setAutorDiretor(rs.getString("autor_diretor"));
+        item.setAnoLancamento(rs.getInt("ano_lancamento"));
+        item.setGenero(rs.getString("genero"));
+        item.setSinopse(rs.getString("sinopse"));
+        item.setTipoMidia(rs.getString("tipo_midia"));
+        return item;
     }
 }
