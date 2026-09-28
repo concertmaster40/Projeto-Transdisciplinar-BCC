@@ -19,10 +19,14 @@ Aplicação web em Java para gerenciamento e catalogação de itens de mídia (l
 
 O projeto adota uma arquitetura web direta baseada no padrão **DAO (Data Access Object)** para separação de persistência e **Servlets** para manipulação das requisições HTTP:
 
-[ Navegador ] <---> [ Servlets (HTTP GET/POST) ] <---> [ ItemMidiaDAO (JDBC) ] <---> [ MySQL ]
-│
-▼
-[ Páginas JSP (View) ]
+```mermaid
+flowchart LR
+    Nav["Navegador"] <-->|HTTP GET / POST| Servlets["Servlets (Controlador)"]
+    Servlets <-->|JDBC| DAO["ItemMidiaDAO"]
+    DAO <-->|SQL| DB[("MySQL")]
+    Servlets -->|Forward| JSP["Páginas JSP (View)"]
+    JSP -.->|HTML / CSS| Nav
+```
 
 ---
 
