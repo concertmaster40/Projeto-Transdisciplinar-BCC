@@ -19,10 +19,14 @@ Aplicação web em Java para gerenciamento e catalogação de itens de mídia (l
 
 O projeto adota uma arquitetura web direta baseada no padrão **DAO (Data Access Object)** para separação de persistência e **Servlets** para manipulação das requisições HTTP:
 
-[ Navegador ] <---> [ Servlets (HTTP GET/POST) ] <---> [ ItemMidiaDAO (JDBC) ] <---> [ MySQL ]
-│
-▼
-[ Páginas JSP (View) ]
+```mermaid
+flowchart LR
+    Nav["Navegador"] <-->|HTTP GET / POST| Servlets["Servlets (Controlador)"]
+    Servlets <-->|JDBC| DAO["ItemMidiaDAO"]
+    DAO <-->|SQL| DB[("MySQL")]
+    Servlets -->|Forward| JSP["Páginas JSP (View)"]
+    JSP -.->|HTML / CSS| Nav
+```
 
 ---
 
@@ -89,11 +93,19 @@ Páginas JSP responsáveis por renderizar dinamicamente o HTML:
 
 O script para criação do banco de dados e da tabela principal encontra-se em `banco_de_dados/catalogo_db.sql`:
 
-```mermaid
-flowchart TD
-    A[Navegador / Cliente] <-->|Requisição / Resposta HTTP| B[Servlets]
-    B <-->|Operações de Dados| C[ItemMidiaDAO - JDBC]
-    C <-->|Consultas SQL| D[(Banco de Dados MySQL)]
-    B -->|Encaminha Dados - Forward| E[Páginas JSP - View]
-    E -->|Renderiza HTML| A
+```sql
+-- Criação do banco de dados
+CREATE DATABASE IF NOT EXISTS catalogo_db;
+USE catalogo_db;
+
+-- Estrutura da tabela principal de mídias (livros/filmes)
+CREATE TABLE item_midia (
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    titulo         VARCHAR(255) NOT NULL,
+    autor_diretor  VARCHAR(255),
+    ano_lancamento INT NOT NULL,
+    genero         VARCHAR(100),
+    sinopse        TEXT,
+    tipo_midia     VARCHAR(50) NOT NULL
+);
 ```

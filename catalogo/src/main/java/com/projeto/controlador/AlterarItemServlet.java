@@ -12,10 +12,28 @@ import javax.servlet.http.HttpServletResponse;
 import com.projeto.dao.ItemMidiaDAO;
 import com.projeto.modelo.ItemMidia;
 
+/**
+ * Servlet responsável por processar as requisições de alteração de itens de mídia.
+ * <p>
+ * Atua no fluxo de edição recuperando os dados atuais do item para exibição no formulário (GET)
+ * e persistindo as alterações submetidas no banco de dados (POST).
+ * </p>
+ * 
+ * @author Nicolas Andreas Jackel
+ * @version 1.0
+ */
 @WebServlet("/alterar")
 public class AlterarItemServlet extends HttpServlet {
 
-    // 1. doGet: Carrega os dados do item e redireciona para a tela de edição
+    /**
+     * Recupera os dados de um item de mídia específico pelo ID e redireciona para a página de edição.
+     * Caso o ID seja inválido ou não encontrado, redireciona o usuário para a listagem geral.
+     * 
+     * @param request  objeto {@link HttpServletRequest} contendo a requisição do cliente
+     * @param response objeto {@link HttpServletResponse} contendo a resposta para o cliente
+     * @throws ServletException se ocorrer um erro interno no processamento do servlet
+     * @throws IOException      se ocorrer um erro de entrada/saída durante o redirecionamento ou despacho
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
@@ -43,7 +61,15 @@ public class AlterarItemServlet extends HttpServlet {
         response.sendRedirect("listarItens");
     }
 
-    // 2. doPost: Recebe o formulário com os dados alterados e faz o UPDATE
+    /**
+     * Recebe os dados atualizados do formulário HTML, valida e persiste as alterações no banco de dados.
+     * Após a atualização, exibe uma mensagem de confirmação para o usuário.
+     * 
+     * @param request  objeto {@link HttpServletRequest} contendo os parâmetros do formulário de edição
+     * @param response objeto {@link HttpServletResponse} para envio da resposta HTML ao cliente
+     * @throws ServletException se ocorrer um erro durante o processamento ou persistência
+     * @throws IOException      se ocorrer um erro de entrada/saída durante a escrita da resposta
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
